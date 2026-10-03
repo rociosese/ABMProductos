@@ -1,6 +1,44 @@
-@CSRPractica_HostAddress = http://localhost:5191
+@CSRPractica_HostAddress = https://localhost:7195
 
-GET {{CSRPractica_HostAddress}}/weatherforecast/
+### GET - Obtener todos los productos
+GET {{CSRPractica_HostAddress}}/api/products
 Accept: application/json
 
 ###
+
+### GET - Obtener producto por ID
+GET {{CSRPractica_HostAddress}}/api/products/3
+Accept: application/json
+
+###
+
+### GET - Producto inexistente
+GET {{CSRPractica_HostAddress}}/api/products/999
+Accept: application/json
+
+###
+
+### POST - Crear producto
+POST {{CSRPractica_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+  "name": "Webcam",
+  "price": 25999.99
+}
+
+###
+
+### PUT - Modificar producto
+PUT {{CSRPractica_HostAddress}}/api/products/1
+Content-Type: application/json
+
+{
+  "name": "Mouse inalámbrico actualizado",
+  "price": 4499.99
+}
+
+###
+
+### DELETE - Eliminar producto
+DELETE {{CSRPractica_HostAddress}}/api/products/2
