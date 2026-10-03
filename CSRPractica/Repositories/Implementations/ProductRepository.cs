@@ -50,5 +50,12 @@ namespace CSRPractica.Repositories.Implementations
         {
             _products.Remove(product);
         }
+        public List<Product> SearchProductsByName(string name)
+        {
+            return _products
+                .Where(p => p.Name.ToLower().Contains(name.ToLower()))
+                .ToList();
+        }
     }
+
 }

@@ -3,12 +3,18 @@ using CSRPractica.Models.DTOs.Requests;
 using CSRPractica.Models.DTOs.Responses;
 using CSRPractica.Repositories.Implementations;
 using CSRPractica.Services.Interfaces;
+using CSRPractica.Repositories.Interfaces;
 
 namespace CSRPractica.Services.Implementations
 {
     public class ProductService : IProductService
     {
-        private ProductRepository _repository = new ProductRepository();
+        private readonly IProductRepository _repository;
+
+        public ProductService(IProductRepository repository)
+        {
+            _repository = repository;
+        }
 
         public List<ProductForReadDto> GetAllProducts()
         {
@@ -95,6 +101,61 @@ namespace CSRPractica.Services.Implementations
             }
 
             _repository.DeleteProduct(product);
+        }
+
+        public List<ProductForReadDto> SearchProductsByName(string name)
+        {
+            List<Product> products = _repository.SearchProductsByName(name);
+
+            List<ProductForReadDto> productsDto = new();
+
+            foreach (Product product in products)
+            {
+                ProductForReadDto dto = new ProductForReadDto
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Price = product.Price
+                };
+
+                productsDto.Add(dto);
+            }
+
+            return productsDto;
+        }
+
+        public ProductStatsDto GetStats()
+        {
+            List<Product> products = _repository.GetAllProducts();
+
+            if (products.Count == 0)
+            {
+                return new ProductStatsDto
+                {
+                    Total = 0,
+                    AveragePrice = 0,
+                    MostExpensiveName = ""
+                };
+            }
+
+            Product mostExpensive = products
+                .OrderByDescending(p => p.Price)
+                .First();
+
+            return new ProductStatsDto
+            {
+                Total = products.Count,
+                AveragePrice = products.Average(p => p.Price),
+                MostExpensiveName = mostExpensive.Name
+            };
+        }
+
+        public bool ProductNameExists(string name)
+        {
+            List<Product> products = _repository.GetAllProducts();
+
+            return products.Any(p =>
+                p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

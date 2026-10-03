@@ -1,6 +1,15 @@
-﻿namespace CSRPractica.Repositories.Interfaces
+﻿using CSRPractica.Entities;
+
+namespace CSRPractica.Repositories.Interfaces
 {
-    public class IProductRepository
+    public interface IProductRepository
     {
+        List<Product> GetAllProducts();
+        Product? GetProductById(int id);
+        void AddProduct(Product product);
+        void UpdateProduct(Product product);
+        void DeleteProduct(Product product);
+
+        List<Product> SearchProductsByName(string name);
     }
 }

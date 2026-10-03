@@ -1,6 +1,8 @@
 ﻿using CSRPractica.Models.DTOs.Requests;
+using CSRPractica.Models.DTOs.Responses;
 using CSRPractica.Services.Implementations;
 using Microsoft.AspNetCore.Mvc;
+using CSRPractica.Services.Interfaces;
 
 namespace CSRPractica.Controllers
 {
@@ -8,7 +10,12 @@ namespace CSRPractica.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private ProductService _service = new ProductService();
+        private readonly IProductService _service;
+
+        public ProductsController(IProductService service)
+        {
+            _service = service;
+        }
 
         [HttpGet]
         public IActionResult GetAll()
@@ -34,6 +41,11 @@ namespace CSRPractica.Controllers
         [HttpPost]
         public IActionResult Create(ProductForCreateDto dto)
         {
+            if (_service.ProductNameExists(dto.Name))
+            {
+                return Conflict("Ya existe un producto con ese nombre.");
+            }
+
             var product = _service.CreateProduct(dto);
 
             return CreatedAtAction(
@@ -71,6 +83,22 @@ namespace CSRPractica.Controllers
             _service.DeleteProduct(id);
 
             return NoContent();
+        }
+
+        [HttpGet("search")]
+        public ActionResult<List<ProductForReadDto>> SearchByName([FromQuery] string name)
+        {
+            List<ProductForReadDto> products = _service.SearchProductsByName(name);
+
+            return Ok(products);
+        }
+
+        [HttpGet("stats")]
+        public IActionResult GetStats()
+        {
+            var stats = _service.GetStats();
+
+            return Ok(stats);
         }
     }
 }

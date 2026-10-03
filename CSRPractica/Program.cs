@@ -1,3 +1,7 @@
+using CSRPractica.Repositories.Implementations;
+using CSRPractica.Repositories.Interfaces;
+using CSRPractica.Services.Implementations;
+using CSRPractica.Services.Interfaces;
 
 namespace CSRPractica
 {
@@ -12,6 +16,9 @@ namespace CSRPractica
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<IProductService, ProductService>();
 
             var app = builder.Build();
 
