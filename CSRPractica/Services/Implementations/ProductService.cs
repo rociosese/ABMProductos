@@ -2,10 +2,11 @@
 using CSRPractica.Models.DTOs.Requests;
 using CSRPractica.Models.DTOs.Responses;
 using CSRPractica.Repositories.Implementations;
+using CSRPractica.Services.Interfaces;
 
 namespace CSRPractica.Services.Implementations
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
         private ProductRepository _repository = new ProductRepository();
 

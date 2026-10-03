@@ -1,8 +1,9 @@
 ﻿using CSRPractica.Entities;
+using CSRPractica.Repositories.Interfaces;
 
 namespace CSRPractica.Repositories.Implementations
 {
-    public class ProductRepository
+    public class ProductRepository : IProductRepository
     {
         private static List<Product> _products = new()
 {
